@@ -14,6 +14,7 @@
 		3BA77E3528590F0D00733E32 /* NiceSpotsMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E3428590F0D00733E32 /* NiceSpotsMapTests.swift */; };
 		3BA77E3F28590F0D00733E32 /* NiceSpotsMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E3E28590F0D00733E32 /* NiceSpotsMapUITests.swift */; };
 		3BA77E4128590F0D00733E32 /* NiceSpotsMapUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E4028590F0D00733E32 /* NiceSpotsMapUITestsLaunchTests.swift */; };
+		3BA77E4E28590FD100733E32 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E4D28590FD100733E32 /* MapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		3BA77E3A28590F0D00733E32 /* NiceSpotsMapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NiceSpotsMapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BA77E3E28590F0D00733E32 /* NiceSpotsMapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiceSpotsMapUITests.swift; sourceTree = "<group>"; };
 		3BA77E4028590F0D00733E32 /* NiceSpotsMapUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiceSpotsMapUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3BA77E4D28590FD100733E32 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			children = (
 				3BA77E2328590F0B00733E32 /* NiceSpotsMapApp.swift */,
 				3BA77E2528590F0B00733E32 /* ContentView.swift */,
+				3BA77E4D28590FD100733E32 /* MapView.swift */,
 				3BA77E2728590F0D00733E32 /* Assets.xcassets */,
 				3BA77E2928590F0D00733E32 /* Preview Content */,
 			);
@@ -258,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BA77E2628590F0B00733E32 /* ContentView.swift in Sources */,
+				3BA77E4E28590FD100733E32 /* MapView.swift in Sources */,
 				3BA77E2428590F0B00733E32 /* NiceSpotsMapApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,6 +424,7 @@
 				DEVELOPMENT_TEAM = 7B4L77MLXJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to show it on the map";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -449,6 +454,7 @@
 				DEVELOPMENT_TEAM = 7B4L77MLXJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to show it on the map";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
