@@ -11,8 +11,6 @@ import MapKit
 struct MapView: View {
     @StateObject private var viewModel = MapViewModel()
     
-    
-    
     var body: some View {
         Map(coordinateRegion: $viewModel.region, showsUserLocation: true).accentColor(Color(.systemCyan)).onAppear{
             viewModel.checkIfLocationServicesIsEnabled()
@@ -29,7 +27,7 @@ struct MapView_Previews: PreviewProvider {
 final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate {
     var locationManager: CLLocationManager?
     
-    @Published private var region = MKCoordinateRegion(
+    @Published var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 40.177200, longitude: 44.503490),
         span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
     )
@@ -38,7 +36,7 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         if CLLocationManager.locationServicesEnabled(){
             locationManager = CLLocationManager()
             locationManager?.delegate = self
-            locationManager?.activityType = .fitness
+            locationManager?.activityType = .automotiveNavigation
         }else{
             print("Location services is disabled")
         }
@@ -56,7 +54,9 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         case .denied:
             print("You have denied this app location permission")
         case .authorizedAlways, .authorizedWhenInUse:
-            break
+            guard let location = locationManager.location else { return }
+            region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
+            
         @unknown default:
             break
         }
