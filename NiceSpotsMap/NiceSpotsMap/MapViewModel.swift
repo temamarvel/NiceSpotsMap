@@ -59,7 +59,6 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         case .authorizedAlways, .authorizedWhenInUse:
             guard let location = locationManager.location else { return }
             region = MKCoordinateRegion(center: location.coordinate, span: MapDetails.defaultSpan)
-            
         @unknown default:
             break
         }
