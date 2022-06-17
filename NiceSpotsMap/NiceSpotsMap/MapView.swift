@@ -9,6 +9,10 @@ import CoreLocationUI
 import SwiftUI
 import MapKit
 
+enum MapColors{
+    static let buttonBackground = LinearGradient(gradient: Gradient(colors: [Color(.systemBlue), Color(.systemMint)]), startPoint: .leading, endPoint: .trailing)
+}
+
 struct MapView: View {
     @StateObject private var mapViewModel = MapViewModel()
     
@@ -16,16 +20,15 @@ struct MapView: View {
         ZStack(alignment: .bottom){
             Map(coordinateRegion: $mapViewModel.region, showsUserLocation: true)
                 .accentColor(Color(.systemCyan))
-                .onAppear{
-                    mapViewModel.checkIfLocationServicesIsEnabled()}
+                .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
             
-            Button{ mapViewModel.requestUserLocation() }
-        label:{Label("Current location", systemImage: "location.circle.fill")
-            .frame(width: 200, height: 50)
-            .background(LinearGradient(gradient: Gradient(colors: [Color(.systemBlue), Color(.systemMint)]), startPoint: .leading, endPoint: .trailing))
-            .foregroundColor(Color(.systemGray6))
-            .clipShape(Capsule()).shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 5)}.padding(.bottom, 50)
-            
+            Button{ mapViewModel.requestUserLocation() } label:{Label("Current location", systemImage: "location.circle.fill")
+                    .frame(width: 200, height: 50)
+                    .background(MapColors.buttonBackground)
+                    .foregroundColor(Color(.systemGray6))
+                    .clipShape(Capsule())
+                .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 5)}
+            .padding(.bottom, 50)
         }
     }
 }
