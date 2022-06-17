@@ -19,7 +19,10 @@ struct MapView: View {
                 .onAppear{
                     mapViewModel.checkIfLocationServicesIsEnabled()}
             
-            Button{mapViewModel.requestAllowOnceLocationPermitions()}label:{Label("Current location", systemImage: "location.circle.fill")}.buttonStyle(.borderedProminent).padding(.bottom, 50).tint(.indigo)
+            Button{mapViewModel.requestAllowOnceLocationPermitions()}label:{Label("Current location", systemImage: "location.circle.fill")}
+                .buttonStyle(.borderedProminent)
+                .padding(.bottom, 50)
+                .tint(.indigo)
         }
     }
 }
