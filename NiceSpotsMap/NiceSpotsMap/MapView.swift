@@ -19,7 +19,7 @@ struct MapView: View {
     var body: some View {
         ZStack(alignment: .bottom){
             Map(coordinateRegion: $mapViewModel.region, showsUserLocation: true)
-                .accentColor(Color(.systemCyan))
+                .accentColor(Color(.systemBlue))
                 .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
             
             Button{ mapViewModel.requestUserLocation() } label:{Label("Current location", systemImage: "location.circle.fill")
