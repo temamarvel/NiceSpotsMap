@@ -19,10 +19,13 @@ struct MapView: View {
                 .onAppear{
                     mapViewModel.checkIfLocationServicesIsEnabled()}
             
-            Button{ mapViewModel.requestUserLocation() }label:{Label("Current location", systemImage: "location.circle.fill")}
-                .buttonStyle(.borderedProminent)
-                .padding(.bottom, 50)
-                .tint(.indigo)
+            Button{ mapViewModel.requestUserLocation() }
+        label:{Label("Current location", systemImage: "location.circle.fill")
+            .frame(width: 200, height: 50)
+            .background(LinearGradient(gradient: Gradient(colors: [Color(.systemBlue), Color(.systemMint)]), startPoint: .leading, endPoint: .trailing))
+            .foregroundColor(Color(.systemGray6))
+            .clipShape(Capsule()).shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 5)}.padding(.bottom, 50)
+            
         }
     }
 }
