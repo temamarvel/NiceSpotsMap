@@ -23,7 +23,7 @@ struct MapView: View {
                 .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
             
             Button{ mapViewModel.requestUserLocation() } label:{Label("Current location", systemImage: "location.circle.fill")
-                    .frame(width: 200, height: 50)
+                    .padding(10)
                     .background(MapColors.buttonBackground)
                     .foregroundColor(Color(.systemGray6))
                     .clipShape(Capsule())
