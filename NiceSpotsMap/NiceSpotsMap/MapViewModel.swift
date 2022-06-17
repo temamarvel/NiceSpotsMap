@@ -24,13 +24,16 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         if CLLocationManager.locationServicesEnabled(){
             locationManager = CLLocationManager()
             locationManager?.delegate = self
+            locationManager?.activityType = .fitness
+            locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager?.pausesLocationUpdatesAutomatically = true
         }else{
             print("Location services is disabled")
         }
     }
     
-    func requestAllowOnceLocationPermitions(){
-        locationManager?.requestLocation()
+    func requestUserLocation(){
+        locationManager?.startUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -39,6 +42,8 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         DispatchQueue.main.async {
             self.region = MKCoordinateRegion(center: latestLocation.coordinate, span: MapDetails.defaultSpan)
         }
+        
+        locationManager?.stopUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
