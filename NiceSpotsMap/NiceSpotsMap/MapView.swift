@@ -5,15 +5,28 @@
 //  Created by Артем Денисов on 14.06.2022.
 //
 
+import CoreLocationUI
 import SwiftUI
 import MapKit
 
 struct MapView: View {
-    @StateObject private var viewModel = MapViewModel()
+    @StateObject private var mapViewModel = MapViewModel()
     
     var body: some View {
-        Map(coordinateRegion: $viewModel.region, showsUserLocation: true).accentColor(Color(.systemCyan)).onAppear{
-            viewModel.checkIfLocationServicesIsEnabled()
+        ZStack(alignment: .bottom){
+            Map(coordinateRegion: $mapViewModel.region, showsUserLocation: true)
+                .accentColor(Color(.systemCyan))
+                .onAppear{
+                    mapViewModel.checkIfLocationServicesIsEnabled()}
+            
+            LocationButton(.currentLocation){
+                mapViewModel.requestAllowOnceLocationPermitions()}
+            .foregroundColor(.white)
+            .cornerRadius(8)
+            .labelStyle(.titleAndIcon)
+            .symbolVariant(.fill)
+            .padding(.bottom, 50)
+            .tint(.indigo)
         }
     }
 }

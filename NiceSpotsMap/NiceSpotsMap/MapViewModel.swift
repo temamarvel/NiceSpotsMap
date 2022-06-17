@@ -29,6 +29,22 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         }
     }
     
+    func requestAllowOnceLocationPermitions(){
+        locationManager?.requestLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let latestLocation = locations.first else { return }
+        
+        DispatchQueue.main.async {
+            self.region = MKCoordinateRegion(center: latestLocation.coordinate, span: MapDetails.defaultSpan)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error.localizedDescription)
+    }
+    
     func checkLocationAuthorization(){
         guard let locationManager = locationManager else { return }
         
