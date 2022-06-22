@@ -1,0 +1,35 @@
+[
+    {
+        "id": 1,
+        "name": "SweetCoast",
+        "category": "Eat",
+        "city": "Yerevan",
+        "coordinates": {
+            "longitude": 44.51653702670684,
+            "latitude": 40.18869127939232
+        },
+        "description": "The nice place. Tasty coffee and deserts. Sandwiches and salads are pretty good."
+    },
+    {
+        "id": 2,
+        "name": "Kavcazskaya plennitsa",
+        "category": "Eat",
+        "city": "Yerevan",
+        "coordinates": {
+            "longitude": 44.510175642049106,
+            "latitude": 40.17957523903488
+        },
+        "description": "Gergian food. Big portions. Rather chip."
+    },
+    {
+        "id": 3,
+        "name": "Ulikhanyan Jazz Club",
+        "category": "Eat",
+        "city": "Yerevan",
+        "coordinates": {
+            "longitude": 44.51709512194008,
+            "latitude": 40.1854709316137
+        },
+        "description": "Great jazz club. Good music. Perfect cocktails."
+    }
+]
