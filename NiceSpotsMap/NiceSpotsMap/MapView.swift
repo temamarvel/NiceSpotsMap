@@ -22,7 +22,7 @@ struct MapView: View {
                 .accentColor(Color(.systemBlue))
                 .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
             
-            Button{ mapViewModel.requestUserLocation() } label:{Label("Current location", systemImage: "location.circle.fill")
+            Button{ mapViewModel.requestUserLocation() } label:{ Label("Current location", systemImage: "location.circle.fill")
                     .padding(10)
                     .background(MapColors.buttonBackground)
                     .foregroundColor(Color(.systemGray6))

@@ -54,7 +54,6 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         guard let locationManager = locationManager else { return }
         
         switch locationManager.authorizationStatus {
-            
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .restricted:
