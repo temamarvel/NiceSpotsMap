@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        MapView().ignoresSafeArea()
+        //MapView().ignoresSafeArea()
+        MKMapViewWrapper().ignoresSafeArea()
     }
 }
 
