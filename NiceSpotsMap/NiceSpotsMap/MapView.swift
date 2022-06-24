@@ -18,7 +18,8 @@ struct MapView: View {
     
     var body: some View {
         ZStack(alignment: .bottom){
-            Map(coordinateRegion: $mapViewModel.region, showsUserLocation: true, annotationItems:  locations){MapMarker(coordinate: $0.locationCoordinate)}
+            MKMapViewWrapper(region: $mapViewModel.region, showUserLocation: true)
+            //Map(coordinateRegion: $mapViewModel.region, showsUserLocation: true, annotationItems:  locations){MapMarker(coordinate: $0.locationCoordinate)}
                 .accentColor(Color(.systemBlue))
                 .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
             

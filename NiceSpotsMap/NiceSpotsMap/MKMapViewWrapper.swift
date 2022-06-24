@@ -11,11 +11,17 @@ import MapKit
 struct MKMapViewWrapper : UIViewRepresentable{
     typealias UIViewType = MKMapView
     
+    let mapView: MKMapView = MKMapView()
+    
+    @Binding var region: MKCoordinateRegion
+    var showUserLocation: Bool
+    
     func makeUIView(context: Context) -> MKMapView {
-        MKMapView()
+        mapView.showsUserLocation = true
+        return mapView
     }
     
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        
+        mapView.setRegion(region, animated: true)
     }
 }
