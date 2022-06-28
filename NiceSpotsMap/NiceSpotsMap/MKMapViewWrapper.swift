@@ -24,7 +24,7 @@ struct MKMapViewWrapper : UIViewRepresentable{
         updateMapRegion(mapView: uiView, region: region)
     }
 
-    func updateMapRegion(mapView: UIViewType, region: MKCoordinateRegion){
+    func updateMapRegion(mapView: MKMapView, region: MKCoordinateRegion){
         mapView.setRegion(region, animated: true)
     }
 }
