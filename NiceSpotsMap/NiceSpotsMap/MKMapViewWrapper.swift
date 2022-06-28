@@ -11,17 +11,20 @@ import MapKit
 struct MKMapViewWrapper : UIViewRepresentable{
     typealias UIViewType = MKMapView
     
-    let mapView: MKMapView = MKMapView()
-    
     @Binding var region: MKCoordinateRegion
     var showUserLocation: Bool
     
-    func makeUIView(context: Context) -> MKMapView {
-        mapView.showsUserLocation = true
+    func makeUIView(context: UIViewRepresentableContext<MKMapViewWrapper>) -> MKMapView {
+        let mapView = MKMapView()
+        mapView.showsUserLocation = showUserLocation
         return mapView
     }
     
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        mapView.setRegion(region, animated: true)
+        updateMapCenter(mapView: uiView, center: CLLocationCoordinate2D(latitude: region.center.latitude, longitude: region.center.longitude))
+    }
+    
+    func updateMapCenter(mapView: UIViewType, center: CLLocationCoordinate2D){
+        mapView.setCenter(center, animated: true)
     }
 }
