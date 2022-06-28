@@ -12,7 +12,6 @@ struct ContentView: View {
     
     var body: some View {
         MapView().ignoresSafeArea()
-        //MKMapViewWrapper(showUserLocation: $showUserLocation).ignoresSafeArea()
     }
 }
 
