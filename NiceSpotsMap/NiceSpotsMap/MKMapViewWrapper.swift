@@ -21,10 +21,10 @@ struct MKMapViewWrapper : UIViewRepresentable{
     }
     
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        updateMapCenter(mapView: uiView, center: CLLocationCoordinate2D(latitude: region.center.latitude, longitude: region.center.longitude))
+        updateMapRegion(mapView: uiView, region: region)
     }
-    
-    func updateMapCenter(mapView: UIViewType, center: CLLocationCoordinate2D){
-        mapView.setCenter(center, animated: true)
+
+    func updateMapRegion(mapView: UIViewType, region: MKCoordinateRegion){
+        mapView.setRegion(region, animated: true)
     }
 }
