@@ -12,11 +12,13 @@ struct MKMapViewWrapper : UIViewRepresentable{
     typealias UIViewType = MKMapView
     
     @Binding var region: MKCoordinateRegion
-    var showUserLocation: Bool
+    var showsUserLocation: Bool
+    var showsScale: Bool
     
     func makeUIView(context: UIViewRepresentableContext<MKMapViewWrapper>) -> MKMapView {
         let mapView = MKMapView()
-        mapView.showsUserLocation = showUserLocation
+        mapView.showsUserLocation = showsUserLocation
+        mapView.showsScale = showsScale
         return mapView
     }
     
