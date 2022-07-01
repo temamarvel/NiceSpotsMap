@@ -9,20 +9,23 @@ import SwiftUI
 import MapKit
 
 struct MKMapViewWrapper : UIViewRepresentable{
-    typealias UIViewType = MKMapView
-    
     @Binding var region: MKCoordinateRegion
     @Binding var pointOfInterestFilter: MKPointOfInterestFilter
     var showsUserLocation: Bool
     var showsScale: Bool
-    var annotations: [MKAnnotation]
+    var annotations: [MKAnnotation]? = nil
     
-    init<Items, Annotation>(region: Binding<MKCoordinateRegion>, showsUserLocation: Bool = true, showsScale: Bool = false, pointOfInterestFilter: Binding<MKPointOfInterestFilter> = .constant(.excludingAll), annotationsDataItems: Items, annotationContent: @escaping (Items.Element) -> Annotation) where Items: RandomAccessCollection, Items.Element: Identifiable, Annotation: MKAnnotation {
+    init<Items, Annotation>(region: Binding<MKCoordinateRegion>, showsUserLocation: Bool = true, showsScale: Bool = false, pointOfInterestFilter: Binding<MKPointOfInterestFilter> = .constant(.excludingAll), annotationsDataItems: Items? = nil, annotationContent: @escaping (Items.Element) -> Annotation) where Items: RandomAccessCollection, Items.Element: Identifiable, Annotation: MKAnnotation {
+        self.init(region: region, showsUserLocation: showsUserLocation, showsScale: showsScale)
+        guard let dataItems = annotationsDataItems else { return }
+            self.annotations = dataItems.map(annotationContent)
+    }
+    
+    init(region: Binding<MKCoordinateRegion>, showsUserLocation: Bool = true, showsScale: Bool = false, pointOfInterestFilter: Binding<MKPointOfInterestFilter> = .constant(.excludingAll)) {
         self._region = region
         self._pointOfInterestFilter = pointOfInterestFilter
         self.showsUserLocation = showsUserLocation
         self.showsScale = showsScale
-        self.annotations = annotationsDataItems.map(annotationContent)
     }
     
     func makeUIView(context: UIViewRepresentableContext<MKMapViewWrapper>) -> MKMapView {
@@ -30,7 +33,9 @@ struct MKMapViewWrapper : UIViewRepresentable{
         mapView.showsUserLocation = showsUserLocation
         mapView.showsScale = showsScale
         mapView.pointOfInterestFilter = pointOfInterestFilter
-        mapView.addAnnotations(annotations)
+        if let annotations = annotations {
+            mapView.addAnnotations(annotations)
+        }
         return mapView
     }
     
