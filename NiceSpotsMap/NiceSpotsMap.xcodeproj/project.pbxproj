@@ -20,6 +20,7 @@
 		3BA77E3F28590F0D00733E32 /* NiceSpotsMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E3E28590F0D00733E32 /* NiceSpotsMapUITests.swift */; };
 		3BA77E4128590F0D00733E32 /* NiceSpotsMapUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E4028590F0D00733E32 /* NiceSpotsMapUITestsLaunchTests.swift */; };
 		3BA77E4E28590FD100733E32 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E4D28590FD100733E32 /* MapView.swift */; };
+		3BFD5625286F2B95006770E1 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD5624286F2B95006770E1 /* BottomSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		3BA77E3E28590F0D00733E32 /* NiceSpotsMapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiceSpotsMapUITests.swift; sourceTree = "<group>"; };
 		3BA77E4028590F0D00733E32 /* NiceSpotsMapUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiceSpotsMapUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3BA77E4D28590FD100733E32 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		3BFD5624286F2B95006770E1 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				3B7B6C062865DBCB003A38E6 /* MKMapViewWrapper.swift */,
 				3BA77E2528590F0B00733E32 /* ContentView.swift */,
 				3BA77E4D28590FD100733E32 /* MapView.swift */,
+				3BFD5624286F2B95006770E1 /* BottomSheet.swift */,
 				3B2912A228638D1D008DC67E /* locationsData.json */,
 				3B2912A428638E0C008DC67E /* Location.swift */,
 				3B2912A6286390CA008DC67E /* ModelData.swift */,
@@ -278,6 +281,7 @@
 			files = (
 				3BA77E2628590F0B00733E32 /* ContentView.swift in Sources */,
 				3B2912A528638E0C008DC67E /* Location.swift in Sources */,
+				3BFD5625286F2B95006770E1 /* BottomSheet.swift in Sources */,
 				3BA77E4E28590FD100733E32 /* MapView.swift in Sources */,
 				3BA77E2428590F0B00733E32 /* NiceSpotsMapApp.swift in Sources */,
 				3B18E236285BB0C6005ECED6 /* MapViewModel.swift in Sources */,
