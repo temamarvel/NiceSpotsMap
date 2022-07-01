@@ -15,12 +15,14 @@ struct MKMapViewWrapper : UIViewRepresentable{
     @Binding var pointOfInterestFilter: MKPointOfInterestFilter
     var showsUserLocation: Bool
     var showsScale: Bool
+    var annotations: [MKAnnotation]
     
-    init(region: Binding<MKCoordinateRegion>, showsUserLocation: Bool = true, showsScale: Bool = false, pointOfInterestFilter: Binding<MKPointOfInterestFilter> = .constant(.excludingAll)) {
+    init<Items, Annotation>(region: Binding<MKCoordinateRegion>, showsUserLocation: Bool = true, showsScale: Bool = false, pointOfInterestFilter: Binding<MKPointOfInterestFilter> = .constant(.excludingAll), annotationsDataItems: Items, annotationContent: @escaping (Items.Element) -> Annotation) where Items: RandomAccessCollection, Items.Element: Identifiable, Annotation: MKAnnotation {
         self._region = region
         self._pointOfInterestFilter = pointOfInterestFilter
         self.showsUserLocation = showsUserLocation
         self.showsScale = showsScale
+        self.annotations = annotationsDataItems.map(annotationContent)
     }
     
     func makeUIView(context: UIViewRepresentableContext<MKMapViewWrapper>) -> MKMapView {
@@ -28,6 +30,7 @@ struct MKMapViewWrapper : UIViewRepresentable{
         mapView.showsUserLocation = showsUserLocation
         mapView.showsScale = showsScale
         mapView.pointOfInterestFilter = pointOfInterestFilter
+        mapView.addAnnotations(annotations)
         return mapView
     }
     
