@@ -9,12 +9,20 @@ import SwiftUI
 
 struct BottomSheet: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        GeometryReader{ geomerty in
+            VStack{
+                //Text("Test text")
+            }
+            .frame(width: geomerty.size.width, height: geomerty.size.height)
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(50)
+            .offset(y: 30)
+        }
     }
 }
-
-struct BottomSheet_Previews: PreviewProvider {
-    static var previews: some View {
-        BottomSheet()
+    
+    struct BottomSheet_Previews: PreviewProvider {
+        static var previews: some View {
+            BottomSheet()
+        }
     }
-}
