@@ -109,14 +109,11 @@
 			isa = PBXGroup;
 			children = (
 				3BA77E2328590F0B00733E32 /* NiceSpotsMapApp.swift */,
-				3B7B6C062865DBCB003A38E6 /* MKMapViewWrapper.swift */,
 				3BA77E2528590F0B00733E32 /* ContentView.swift */,
-				3BA77E4D28590FD100733E32 /* MapView.swift */,
+				3BFD56272871BBC9006770E1 /* Locations */,
+				3BFD56262871BB7E006770E1 /* Map */,
 				3BFD5624286F2B95006770E1 /* BottomSheet.swift */,
-				3B2912A228638D1D008DC67E /* locationsData.json */,
-				3B2912A428638E0C008DC67E /* Location.swift */,
 				3B2912A6286390CA008DC67E /* ModelData.swift */,
-				3B18E235285BB0C6005ECED6 /* MapViewModel.swift */,
 				3BA77E2728590F0D00733E32 /* Assets.xcassets */,
 				3BA77E2928590F0D00733E32 /* Preview Content */,
 			);
@@ -146,6 +143,25 @@
 				3BA77E4028590F0D00733E32 /* NiceSpotsMapUITestsLaunchTests.swift */,
 			);
 			path = NiceSpotsMapUITests;
+			sourceTree = "<group>";
+		};
+		3BFD56262871BB7E006770E1 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				3BA77E4D28590FD100733E32 /* MapView.swift */,
+				3B7B6C062865DBCB003A38E6 /* MKMapViewWrapper.swift */,
+				3B18E235285BB0C6005ECED6 /* MapViewModel.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		3BFD56272871BBC9006770E1 /* Locations */ = {
+			isa = PBXGroup;
+			children = (
+				3B2912A228638D1D008DC67E /* locationsData.json */,
+				3B2912A428638E0C008DC67E /* Location.swift */,
+			);
+			path = Locations;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
