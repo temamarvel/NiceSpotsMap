@@ -18,7 +18,11 @@ struct BottomSheet<Content>: View where Content: View {
     
     var body: some View {
         GeometryReader{ geomerty in
-            VStack{
+            VStack(){
+                Capsule()
+                    .fill(Color(.tertiarySystemFill))
+                    .padding()
+                    .frame(width: 100, height: 50)
                 self.content
             }
             .frame(width: geomerty.size.width, height: geomerty.size.height)
@@ -37,7 +41,9 @@ struct BottomSheet<Content>: View where Content: View {
 struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
         BottomSheet(){
-            Text("Test text")
+            VStack{
+                Text("Test text")
+            }.background(.red)
         }
     }
 }
