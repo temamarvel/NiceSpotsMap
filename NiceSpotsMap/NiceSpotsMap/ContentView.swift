@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var showUserLocation = true
-    
     var body: some View {
         MapView().ignoresSafeArea()
     }

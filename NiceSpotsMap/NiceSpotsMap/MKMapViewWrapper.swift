@@ -32,7 +32,7 @@ struct MKMapViewWrapper : UIViewRepresentable{
         mapView.showsUserLocation = showsUserLocation
         mapView.showsScale = showsScale
         mapView.pointOfInterestFilter = pointOfInterestFilter
-        if let annotations = annotations {
+        if let annotations = self.annotations {
             mapView.addAnnotations(annotations)
         }
         return mapView
@@ -41,7 +41,7 @@ struct MKMapViewWrapper : UIViewRepresentable{
     func updateUIView(_ uiView: UIViewType, context: Context) {
         updateMapRegion(mapView: uiView, region: region)
     }
-
+    
     func updateMapRegion(mapView: MKMapView, region: MKCoordinateRegion){
         mapView.setRegion(region, animated: true)
     }

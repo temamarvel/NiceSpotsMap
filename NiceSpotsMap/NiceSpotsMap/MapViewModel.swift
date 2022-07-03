@@ -13,8 +13,9 @@ enum MapDetails{
 }
 
 final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate {
-    var locationManager: CLLocationManager?
-    
+    private var locationManager: CLLocationManager?
+    var showsUserLocation = true
+    var showsScale = true
     @Published var region = MKCoordinateRegion(
         center: MapDetails.startingLocation,
         span: MapDetails.defaultSpan
@@ -22,18 +23,18 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
     
     func checkIfLocationServicesIsEnabled(){
         if CLLocationManager.locationServicesEnabled(){
-            locationManager = CLLocationManager()
-            locationManager?.delegate = self
-            locationManager?.activityType = .fitness
-            locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager?.pausesLocationUpdatesAutomatically = true
+            self.locationManager = CLLocationManager()
+            self.locationManager?.delegate = self
+            self.locationManager?.activityType = .fitness
+            self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager?.pausesLocationUpdatesAutomatically = true
         }else{
             print("Location services is disabled")
         }
     }
     
     func requestUserLocation(){
-        locationManager?.startUpdatingLocation()
+        self.locationManager?.startUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -43,7 +44,7 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
             self.region = MKCoordinateRegion(center: latestLocation.coordinate, span: MapDetails.defaultSpan)
         }
         
-        locationManager?.stopUpdatingLocation()
+        self.locationManager?.stopUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -51,7 +52,7 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
     }
     
     func checkLocationAuthorization(){
-        guard let locationManager = locationManager else { return }
+        guard let locationManager = self.locationManager else { return }
         
         switch locationManager.authorizationStatus {
         case .notDetermined:
