@@ -11,6 +11,7 @@
 		3B2912A328638D1D008DC67E /* locationsData.json in Resources */ = {isa = PBXBuildFile; fileRef = 3B2912A228638D1D008DC67E /* locationsData.json */; };
 		3B2912A528638E0C008DC67E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2912A428638E0C008DC67E /* Location.swift */; };
 		3B2912A7286390CA008DC67E /* ModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2912A6286390CA008DC67E /* ModelData.swift */; };
+		3B64D19528734D9200D7AD6F /* DragCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B64D19428734D9200D7AD6F /* DragCapsule.swift */; };
 		3B7B6C072865DBCB003A38E6 /* MKMapViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B6C062865DBCB003A38E6 /* MKMapViewWrapper.swift */; };
 		3BA77E2428590F0B00733E32 /* NiceSpotsMapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E2328590F0B00733E32 /* NiceSpotsMapApp.swift */; };
 		3BA77E2628590F0B00733E32 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77E2528590F0B00733E32 /* ContentView.swift */; };
@@ -45,6 +46,7 @@
 		3B2912A228638D1D008DC67E /* locationsData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = locationsData.json; sourceTree = "<group>"; };
 		3B2912A428638E0C008DC67E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		3B2912A6286390CA008DC67E /* ModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
+		3B64D19428734D9200D7AD6F /* DragCapsule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragCapsule.swift; sourceTree = "<group>"; };
 		3B7B6C062865DBCB003A38E6 /* MKMapViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKMapViewWrapper.swift; sourceTree = "<group>"; };
 		3BA77E2028590F0B00733E32 /* NiceSpotsMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceSpotsMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BA77E2328590F0B00733E32 /* NiceSpotsMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiceSpotsMapApp.swift; sourceTree = "<group>"; };
@@ -85,6 +87,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B64D19628734D9900D7AD6F /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				3BFD5624286F2B95006770E1 /* BottomSheet.swift */,
+				3B64D19428734D9200D7AD6F /* DragCapsule.swift */,
+			);
+			path = BottomSheet;
+			sourceTree = "<group>";
+		};
 		3BA77E1728590F0B00733E32 = {
 			isa = PBXGroup;
 			children = (
@@ -112,7 +123,7 @@
 				3BA77E2528590F0B00733E32 /* ContentView.swift */,
 				3BFD56272871BBC9006770E1 /* Locations */,
 				3BFD56262871BB7E006770E1 /* Map */,
-				3BFD5624286F2B95006770E1 /* BottomSheet.swift */,
+				3B64D19628734D9900D7AD6F /* BottomSheet */,
 				3B2912A6286390CA008DC67E /* ModelData.swift */,
 				3BA77E2728590F0D00733E32 /* Assets.xcassets */,
 				3BA77E2928590F0D00733E32 /* Preview Content */,
@@ -297,6 +308,7 @@
 			files = (
 				3BA77E2628590F0B00733E32 /* ContentView.swift in Sources */,
 				3B2912A528638E0C008DC67E /* Location.swift in Sources */,
+				3B64D19528734D9200D7AD6F /* DragCapsule.swift in Sources */,
 				3BFD5625286F2B95006770E1 /* BottomSheet.swift in Sources */,
 				3BA77E4E28590FD100733E32 /* MapView.swift in Sources */,
 				3BA77E2428590F0B00733E32 /* NiceSpotsMapApp.swift in Sources */,

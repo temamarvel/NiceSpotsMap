@@ -19,13 +19,10 @@ struct BottomSheet<Content>: View where Content: View {
     var body: some View {
         GeometryReader{ geomerty in
             VStack(){
-                Capsule()
-                    .fill(Color(.tertiarySystemFill))
-                    .padding()
-                    .frame(width: 100, height: 50)
+                DragCapsule()
                 self.content
             }
-            .frame(width: geomerty.size.width, height: geomerty.size.height)
+            .frame(width: geomerty.size.width, height: geomerty.size.height, alignment: .top)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(50)
             .offset(y: self.offset + self.gestureState)
@@ -42,8 +39,10 @@ struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
         BottomSheet(){
             VStack{
-                Text("Test text")
-            }.background(.red)
+                Text("Test text 123")
+                Text("Hello world")
+                Spacer()
+            }.frame(width: 200, height: 400).background(.red)
         }
     }
 }
