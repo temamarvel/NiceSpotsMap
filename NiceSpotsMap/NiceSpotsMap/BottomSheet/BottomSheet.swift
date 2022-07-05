@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct BottomSheet<Content>: View where Content: View {
-    @GestureState private var gestureState: CGFloat = 0
+    @GestureState private var translation: CGFloat = 0
     @Binding var isOpen: Bool
     //todo without @State
-    @State private var offset: CGFloat = 0
+    @State private var dragEndOffset: CGFloat = 0
+    private var offset: CGFloat { self.dragEndOffset + self.translation}
     let content: Content
     
     init(isOpen: Binding<Bool> = .constant(false), @ViewBuilder content: () -> Content) {
@@ -28,20 +29,30 @@ struct BottomSheet<Content>: View where Content: View {
             .frame(width: geomerty.size.width, height: geomerty.size.height + geomerty.safeAreaInsets.bottom, alignment: .top)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(40)
-            .offset(y: isOpen ? 10 : geomerty.size.height)
+            .offset(y: isOpen ? offset : geomerty.size.height)
             .animation(.interactiveSpring(response: 1), value: self.isOpen)
-            .animation(.interactiveSpring(), value: self.offset)
-//            .gesture(DragGesture()
-//                .updating($gestureState){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
-//                .onEnded{ value in self.offset = value.location.y }
-//            )
+            .animation(.interactiveSpring(response: 1), value: self.offset)
+            .gesture(DragGesture()
+                .updating($translation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
+                .onEnded{ value in
+                    if value.location.y >= geomerty.size.height / 2 && value.location.y <= geomerty.size.height {
+                        self.dragEndOffset = geomerty.size.height / 2
+                        return
+                    }
+                    
+                    if value.location.y < geomerty.size.height / 2 {
+                        self.dragEndOffset = 10
+                        return
+                    }
+                }
+            )
         }
     }
 }
 
 struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        BottomSheet(){
+        BottomSheet(isOpen: .constant(true)){
             VStack{
                 Text("Test text 123")
                 Text("Hello world")
