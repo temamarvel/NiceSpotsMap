@@ -11,6 +11,25 @@ enum SnappingLocation{
     case top(CGFloat)
     case middle(CGFloat)
     case bottom(CGFloat)
+    
+    mutating func calculateNewSnappingLocation(y: CGFloat, size: CGSize){
+        //y in bounds of view
+        guard y > 0 && y <= size.height else { return }
+        
+        //y in the bottom part of view
+        if y >= size.height / 2 && y <= size.height {
+            self = .middle(size.height / 2)
+            return
+        }
+        
+        //y in the top part of view
+        if y < size.height / 2 {
+            self = .top(50)
+            return
+        }
+        
+        self = .top(0)
+    }
 }
 
 struct BottomSheet<Content>: View where Content: View {
@@ -49,17 +68,7 @@ struct BottomSheet<Content>: View where Content: View {
             .animation(.interactiveSpring(response: 1), value: self.offset)
             .gesture(DragGesture()
                 .updating($translation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
-                .onEnded{ value in
-                    if value.location.y >= geomerty.size.height / 2 && value.location.y <= geomerty.size.height {
-                        self.snappingLocation = .middle(geomerty.size.height / 2)
-                        return
-                    }
-                    
-                    if value.location.y < geomerty.size.height / 2 {
-                        self.snappingLocation = .top(10)
-                        return
-                    }
-                }
+                .onEnded{ value in self.snappingLocation.calculateNewSnappingLocation(y: value.location.y, size: geomerty.size) }
             )
         }
     }
