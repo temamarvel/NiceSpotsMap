@@ -15,6 +15,11 @@ enum MapColors{
 
 struct MapView: View {
     @StateObject private var mapViewModel = MapViewModel()
+    @State var selectedAnnotation: MKAnnotation? = nil
+    private var isSheetOpen: Bool {
+        guard let _ = selectedAnnotation else { return false }
+        return true
+    }
     
     var body: some View {
         ZStack(alignment: .bottom){
@@ -29,6 +34,12 @@ struct MapView: View {
                     .clipShape(Capsule())
                 .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 0)}
             .padding(.bottom, 50)
+            
+//            BottomSheet(isOpen: isSheetOpen){
+//                VStack{
+//                    Text("Place description")
+//                }.frame(width: 100, height: 100).background(Color(.systemPink))
+//            }
         }
     }
 }

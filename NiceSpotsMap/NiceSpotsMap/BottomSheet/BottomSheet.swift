@@ -34,7 +34,7 @@ enum SnappingLocation{
 
 struct BottomSheet<Content>: View where Content: View {
     @GestureState private var translation: CGFloat = 0
-    @Binding var isOpen: Bool
+    var isOpen: Bool
     @State private var snappingLocation: SnappingLocation = .top(0)
     private var offset: CGFloat {
         switch self.snappingLocation {
@@ -49,8 +49,8 @@ struct BottomSheet<Content>: View where Content: View {
     }
     let content: Content
     
-    init(isOpen: Binding<Bool> = .constant(false), @ViewBuilder content: () -> Content) {
-        self._isOpen = isOpen
+    init(isOpen: Bool = false, @ViewBuilder content: () -> Content) {
+        self.isOpen = isOpen
         self.content = content()
     }
     
@@ -64,8 +64,8 @@ struct BottomSheet<Content>: View where Content: View {
             .background(Color(.secondarySystemBackground))
             .cornerRadius(40)
             .offset(y: isOpen ? offset : geomerty.size.height)
-            .animation(.interactiveSpring(response: 1), value: self.isOpen)
-            .animation(.interactiveSpring(response: 1), value: self.offset)
+            .animation(.interactiveSpring(response: 0.8), value: self.isOpen)
+            .animation(.interactiveSpring(), value: self.offset)
             .gesture(DragGesture()
                 .updating($translation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
                 .onEnded{ value in self.snappingLocation.calculateNewSnappingLocation(y: value.location.y, size: geomerty.size) }
@@ -76,7 +76,7 @@ struct BottomSheet<Content>: View where Content: View {
 
 struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        BottomSheet(isOpen: .constant(true)){
+        BottomSheet(isOpen: true){
             VStack{
                 Text("Test text 123")
                 Text("Hello world")

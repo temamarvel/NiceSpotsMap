@@ -17,7 +17,8 @@ struct ContentView: View {
                 .onTapGesture {
                     isSheetOpen.toggle()
                 }
-            BottomSheet(isOpen: $isSheetOpen){
+            
+            BottomSheet(isOpen: isSheetOpen){
                 VStack{
                     Text("Place description")
                 }.frame(width: 100, height: 100).background(Color(.systemPink))
