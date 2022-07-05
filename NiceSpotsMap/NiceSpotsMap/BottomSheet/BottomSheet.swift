@@ -7,12 +7,27 @@
 
 import SwiftUI
 
+enum SnappingLocation{
+    case top(CGFloat)
+    case middle(CGFloat)
+    case bottom(CGFloat)
+}
+
 struct BottomSheet<Content>: View where Content: View {
     @GestureState private var translation: CGFloat = 0
     @Binding var isOpen: Bool
-    //todo without @State
-    @State private var dragEndOffset: CGFloat = 0
-    private var offset: CGFloat { self.dragEndOffset + self.translation}
+    @State private var snappingLocation: SnappingLocation = .top(0)
+    private var offset: CGFloat {
+        switch self.snappingLocation {
+        case .top(let value):
+            return value + self.translation
+        case .middle(let value):
+            return value + self.translation
+        case .bottom(let value):
+            return value + self.translation
+        }
+        
+    }
     let content: Content
     
     init(isOpen: Binding<Bool> = .constant(false), @ViewBuilder content: () -> Content) {
@@ -36,12 +51,12 @@ struct BottomSheet<Content>: View where Content: View {
                 .updating($translation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
                 .onEnded{ value in
                     if value.location.y >= geomerty.size.height / 2 && value.location.y <= geomerty.size.height {
-                        self.dragEndOffset = geomerty.size.height / 2
+                        self.snappingLocation = .middle(geomerty.size.height / 2)
                         return
                     }
                     
                     if value.location.y < geomerty.size.height / 2 {
-                        self.dragEndOffset = 10
+                        self.snappingLocation = .top(10)
                         return
                     }
                 }
