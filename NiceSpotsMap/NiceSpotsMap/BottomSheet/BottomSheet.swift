@@ -9,10 +9,13 @@ import SwiftUI
 
 struct BottomSheet<Content>: View where Content: View {
     @GestureState private var gestureState: CGFloat = 0
+    @Binding var isOpen: Bool
+    //todo without @State
     @State private var offset: CGFloat = 0
     let content: Content
     
-    init(@ViewBuilder content: () -> Content) {
+    init(isOpen: Binding<Bool> = .constant(false), @ViewBuilder content: () -> Content) {
+        self._isOpen = isOpen
         self.content = content()
     }
     
@@ -22,15 +25,16 @@ struct BottomSheet<Content>: View where Content: View {
                 DragCapsule()
                 self.content
             }
-            .frame(width: geomerty.size.width, height: geomerty.size.height, alignment: .top)
+            .frame(width: geomerty.size.width, height: geomerty.size.height + geomerty.safeAreaInsets.bottom, alignment: .top)
             .background(Color(.secondarySystemBackground))
-            .cornerRadius(50)
-            .offset(y: self.offset + self.gestureState)
+            .cornerRadius(40)
+            .offset(y: isOpen ? 10 : geomerty.size.height)
+            .animation(.interactiveSpring(response: 1), value: self.isOpen)
             .animation(.interactiveSpring(), value: self.offset)
-            .gesture(DragGesture()
-                .updating($gestureState){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
-                .onEnded{ value in self.offset = value.location.y }
-            )
+//            .gesture(DragGesture()
+//                .updating($gestureState){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
+//                .onEnded{ value in self.offset = value.location.y }
+//            )
         }
     }
 }

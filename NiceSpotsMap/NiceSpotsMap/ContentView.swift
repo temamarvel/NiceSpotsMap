@@ -8,8 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var isSheetOpen: Bool = false
+    
     var body: some View {
-        MapView().ignoresSafeArea()
+        ZStack{
+            MapView()
+                .ignoresSafeArea()
+                .onTapGesture {
+                    isSheetOpen.toggle()
+                }
+            BottomSheet(isOpen: $isSheetOpen){
+                VStack{
+                    Text("Place description")
+                }.frame(width: 100, height: 100).background(Color(.systemPink))
+            }
+        }
     }
 }
 
