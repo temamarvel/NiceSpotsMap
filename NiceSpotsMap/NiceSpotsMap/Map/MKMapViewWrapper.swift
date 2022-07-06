@@ -38,6 +38,7 @@ struct MKMapViewWrapper : UIViewRepresentable{
     
     func makeUIView(context: UIViewRepresentableContext<MKMapViewWrapper>) -> MKMapView {
         let mapView = MKMapView()
+        mapView.delegate = context.coordinator
         mapView.showsUserLocation = showsUserLocation
         mapView.showsScale = showsScale
         mapView.pointOfInterestFilter = pointOfInterestFilter
@@ -53,5 +54,15 @@ struct MKMapViewWrapper : UIViewRepresentable{
     
     func updateMapRegion(mapView: MKMapView, region: MKCoordinateRegion){
         mapView.setRegion(region, animated: true)
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+    
+    final class Coordinator: NSObject, MKMapViewDelegate{
+        func mapView(_ mapView: MKMapView, didDeselect annotation: MKAnnotation) {
+            
+        }
     }
 }
