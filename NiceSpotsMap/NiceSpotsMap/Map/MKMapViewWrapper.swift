@@ -24,6 +24,9 @@ struct MKMapViewWrapper : UIViewRepresentable{
     //судя по всему нужен @Binding потому что аннотации могут добавляться или удаляться
     var annotations: [MKAnnotation]? = nil
     
+    //handler
+    var onAnnotationDidSelectAction: ((MKAnnotation?) -> Void)? = nil
+    
     init<Items, Annotation>(region: Binding<MKCoordinateRegion>, showsUserLocation: Bool = true, showsScale: Bool = false, pointOfInterestFilter: Binding<MKPointOfInterestFilter> = .constant(.excludingAll), annotationsDataItems: Items, annotationContent: @escaping (Items.Element) -> Annotation) where Items: RandomAccessCollection, Items.Element: Identifiable, Annotation: MKAnnotation {
         self.init(region: region, showsUserLocation: showsUserLocation, showsScale: showsScale)
         self.annotations = annotationsDataItems.map(annotationContent)
@@ -57,12 +60,25 @@ struct MKMapViewWrapper : UIViewRepresentable{
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        Coordinator(mkMapWrapper: self)
+    }
+    
+    func onAnnotationDidSelect(_ handler: @escaping (MKAnnotation?) -> Void) -> MKMapViewWrapper {
+        var newMapWrapper = self
+        newMapWrapper.onAnnotationDidSelectAction = handler
+        return newMapWrapper
     }
     
     final class Coordinator: NSObject, MKMapViewDelegate{
-        func mapView(_ mapView: MKMapView, didDeselect annotation: MKAnnotation) {
-            
+        var mkMapWrapper: MKMapViewWrapper
+        
+        init(mkMapWrapper: MKMapViewWrapper) {
+            self.mkMapWrapper = mkMapWrapper
+        }
+        
+        func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+            guard let action = mkMapWrapper.onAnnotationDidSelectAction else { return }
+            action(annotation)
         }
     }
 }

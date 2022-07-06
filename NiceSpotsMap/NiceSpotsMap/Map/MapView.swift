@@ -28,10 +28,14 @@ struct MapView: View {
         guard let _ = selectedAnnotation else { return false }
         return true
     }
+    @State private var isOpen: Bool = false
     
     var body: some View {
         ZStack(alignment: .bottom){
             MKMapViewWrapper(region: $mapViewModel.region, showsUserLocation: mapViewModel.showsUserLocation, showsScale: mapViewModel.showsScale, annotationsDataItems: locations) { MKPointAnnotation(__coordinate: $0.locationCoordinate, title: $0.name, subtitle: $0.description)}
+                .onAnnotationDidSelect{ annotation in
+                    isOpen.toggle()
+                }
                 .accentColor(Color(.systemBlue))
                 .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
             
