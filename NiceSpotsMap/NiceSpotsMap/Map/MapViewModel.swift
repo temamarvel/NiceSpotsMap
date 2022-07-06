@@ -12,10 +12,19 @@ enum MapDetails{
     static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
 }
 
+//класс-модель для карты
+//как любой класс в swift - это тип-ссылка (у умеет обновляться не пересоздаваясь)
+//наследует ObservableObject протокол для того чтобы следить за изменениями своих пропертей
+//содержит в себе все данные которые будут отображены на карте
+//так же у него есть методы которые получают/обновляют/изменяют данные для отображения
+//есть методы для связи с окружением/получением разрешений на отслеживание геопозиции от пользователя
 final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager: CLLocationManager?
     var showsUserLocation = true
     var showsScale = true
+    
+    //проперть которую мы хотим отслеживать (именно для этого тут используется враппер @Published)
+    //когда регион так или иначе меняется - все связанные view будут пересозданы
     @Published var region = MKCoordinateRegion(
         center: MapDetails.startingLocation,
         span: MapDetails.defaultSpan

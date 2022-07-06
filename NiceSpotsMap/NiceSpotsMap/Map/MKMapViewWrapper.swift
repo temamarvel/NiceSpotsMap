@@ -8,11 +8,20 @@
 import SwiftUI
 import MapKit
 
+//swiftui враппер для uikit mkmapview
 struct MKMapViewWrapper : UIViewRepresentable{
+    //хранит ссылку на region
+    //враппер @Binding может читать и менять region
+    //но при этом не отслеживает его изменения (т.е. не пошлет нотификации ни в сабвью ни в супервью)
+    //при т.к. в нашем случае region - это паблишед проперти в обсервабл объекте, то сам этот объект отследит изменения и пошлет нотификации всем связанным вью. и как следствие перерисует даже этот враппер карты
+    //но важно понимать что триггером для перерисовки будет не то, что это проперть обернута в @Binding
     @Binding var region: MKCoordinateRegion
+    //см выше
     @Binding var pointOfInterestFilter: MKPointOfInterestFilter
+    //тут биндинг не нужен так как достаточно выставить эти проперти только при инициализации view
     var showsUserLocation: Bool
     var showsScale: Bool
+    //судя по всему нужен @Binding потому что аннотации могут добавляться или удаляться
     var annotations: [MKAnnotation]? = nil
     
     init<Items, Annotation>(region: Binding<MKCoordinateRegion>, showsUserLocation: Bool = true, showsScale: Bool = false, pointOfInterestFilter: Binding<MKPointOfInterestFilter> = .constant(.excludingAll), annotationsDataItems: Items, annotationContent: @escaping (Items.Element) -> Annotation) where Items: RandomAccessCollection, Items.Element: Identifiable, Annotation: MKAnnotation {

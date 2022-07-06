@@ -13,9 +13,17 @@ enum MapColors{
     static let buttonBackground = LinearGradient(gradient: Gradient(colors: [Color(.systemBlue), Color(.systemMint)]), startPoint: .leading, endPoint: .trailing)
 }
 
+//создает карту и все что с ней связано: кнопки, меню и т.д.
 struct MapView: View {
+    //создаем класс-модель для карты
+    //через нее будем получать все данные для отображения/разрешения от пользователя
+    //будет создана один раз для всех инстансов MapView (в нашем случае инстанс и так будет только один на все приложение)
+    //используем враппер @StateObject чтобы получать уведомления когда отслеживаемые проперти внутри модели будут меняться (в нашем случае это проперть region)
+    //используется @StateObject для того чтобы хранить инстанс модели, а не  @ObservedObject, который хранит только ссылку
     @StateObject private var mapViewModel = MapViewModel()
-    @State var selectedAnnotation: MKAnnotation? = nil
+    
+    //todo
+    @State private var selectedAnnotation: MKAnnotation? = nil
     private var isSheetOpen: Bool {
         guard let _ = selectedAnnotation else { return false }
         return true

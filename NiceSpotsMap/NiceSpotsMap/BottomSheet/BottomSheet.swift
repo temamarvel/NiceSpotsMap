@@ -13,7 +13,7 @@ enum SnappingLocation{
     case bottom(CGFloat)
     
     mutating func calculateNewSnappingLocation(y: CGFloat, size: CGSize){
-        //y in bounds of view
+        //y inside bounds of view
         guard y > 0 && y <= size.height else { return }
         
         //y in the bottom part of view
@@ -22,7 +22,7 @@ enum SnappingLocation{
             return
         }
         
-        //y in the top part of view
+        //y inside the top part of view
         if y < size.height / 2 {
             self = .top(50)
             return
@@ -34,7 +34,8 @@ enum SnappingLocation{
 
 struct BottomSheet<Content>: View where Content: View {
     @GestureState private var translation: CGFloat = 0
-    var isOpen: Bool
+    //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
+    @Binding var isOpen: Bool
     @State private var snappingLocation: SnappingLocation = .top(0)
     private var offset: CGFloat {
         switch self.snappingLocation {
@@ -49,8 +50,8 @@ struct BottomSheet<Content>: View where Content: View {
     }
     let content: Content
     
-    init(isOpen: Bool = false, @ViewBuilder content: () -> Content) {
-        self.isOpen = isOpen
+    init(isOpen: Binding<Bool> = .constant(false), @ViewBuilder content: () -> Content) {
+        self._isOpen = isOpen
         self.content = content()
     }
     
@@ -76,7 +77,7 @@ struct BottomSheet<Content>: View where Content: View {
 
 struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        BottomSheet(isOpen: true){
+        BottomSheet(isOpen: .constant(true)){
             VStack{
                 Text("Test text 123")
                 Text("Hello world")

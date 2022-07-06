@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var isSheetOpen: Bool = false
+    @State private var isSheetOpen: Bool = false
     
     var body: some View {
         ZStack{
@@ -18,7 +18,7 @@ struct ContentView: View {
                     isSheetOpen.toggle()
                 }
             
-            BottomSheet(isOpen: isSheetOpen){
+            BottomSheet(isOpen: $isSheetOpen){
                 VStack{
                     Text("Place description")
                 }.frame(width: 100, height: 100).background(Color(.systemPink))
