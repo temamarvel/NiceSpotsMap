@@ -24,8 +24,9 @@ struct MKMapViewWrapper : UIViewRepresentable{
     //судя по всему нужен @Binding потому что аннотации могут добавляться или удаляться
     var annotations: [MKAnnotation]? = nil
     
-    //handler
-    var onAnnotationDidSelectAction: ((MKAnnotation?) -> Void)? = nil
+    //actions
+    private var onAnnotationDidSelectAction: ((MKAnnotation?) -> Void)? = nil
+    private var onAnnotationDidDeselectAction: ((MKAnnotation?) -> Void)? = nil
     
     init<Items, Annotation>(region: Binding<MKCoordinateRegion>, showsUserLocation: Bool = true, showsScale: Bool = false, pointOfInterestFilter: Binding<MKPointOfInterestFilter> = .constant(.excludingAll), annotationsDataItems: Items, annotationContent: @escaping (Items.Element) -> Annotation) where Items: RandomAccessCollection, Items.Element: Identifiable, Annotation: MKAnnotation {
         self.init(region: region, showsUserLocation: showsUserLocation, showsScale: showsScale)
@@ -63,9 +64,15 @@ struct MKMapViewWrapper : UIViewRepresentable{
         Coordinator(mkMapWrapper: self)
     }
     
-    func onAnnotationDidSelect(_ handler: @escaping (MKAnnotation?) -> Void) -> MKMapViewWrapper {
+    func onAnnotationDidSelect(_ action: @escaping (MKAnnotation?) -> Void) -> MKMapViewWrapper {
         var newMapWrapper = self
-        newMapWrapper.onAnnotationDidSelectAction = handler
+        newMapWrapper.onAnnotationDidSelectAction = action
+        return newMapWrapper
+    }
+    
+    func onAnnotationDidDeselect(_ action: @escaping (MKAnnotation?) -> Void) -> MKMapViewWrapper {
+        var newMapWrapper = self
+        newMapWrapper.onAnnotationDidDeselectAction = action
         return newMapWrapper
     }
     
@@ -78,6 +85,11 @@ struct MKMapViewWrapper : UIViewRepresentable{
         
         func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
             guard let action = mkMapWrapper.onAnnotationDidSelectAction else { return }
+            action(annotation)
+        }
+        
+        func mapView(_ mapView: MKMapView, didDeselect annotation: MKAnnotation) {
+            guard let action = mkMapWrapper.onAnnotationDidDeselectAction else { return }
             action(annotation)
         }
     }
