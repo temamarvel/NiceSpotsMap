@@ -7,50 +7,52 @@
 
 import SwiftUI
 
-enum SnappingPosition{
-    case top(CGFloat)
-    case middle(CGFloat)
-    case bottom(CGFloat)
-    
-    mutating func calculateSnappingPosition(y: CGFloat, size: CGSize){
-        //y inside bounds of view
-        guard y > 0 && y <= size.height else { return }
-        
-        //y in the bottom part of view
-        if y >= size.height / 2 && y <= size.height {
-            self = .middle(size.height / 2)
-            return
-        }
-        
-        //y inside the top part of view
-        if y < size.height / 2 {
-            self = .top(50)
-            return
-        }
-        
-        self = .top(0)
-    }
+enum OpenPosition{
+    case top
+    case middle
+}
+
+private enum BottomSheetOptions{
+    static let snappingDelta: CGFloat = 150
+}
+
+private struct SnappingPosition{
+    static var top: CGFloat = 0
+    static var middle: CGFloat = 0
+    static var bottom: CGFloat = 0
 }
 
 struct BottomSheet<Content>: View where Content: View {
-    @GestureState private var translation: CGFloat = 0
+    @GestureState private var dragTranslation: CGFloat = 0
     //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
     @Binding var isOpen: Bool
-    @State private var snappingPosition: SnappingPosition = .top(0)
-    private var offset: CGFloat {
-        switch self.snappingPosition {
-        case .top(let value):
-            return value + self.translation
-        case .middle(let value):
-            return value + self.translation
-        case .bottom(let value):
-            return value + self.translation
+    @State private var position: CGFloat = SnappingPosition.bottom {
+        didSet{
+            if position < 0 {
+                position = 0
+                return
+            }
+            if position != SnappingPosition.middle && abs(position - SnappingPosition.middle) <= BottomSheetOptions.snappingDelta {
+                position = SnappingPosition.middle
+                return
+            }
+            if position != SnappingPosition.top && position - SnappingPosition.top > 0 && position - SnappingPosition.top < BottomSheetOptions.snappingDelta {
+                position = SnappingPosition.top
+                return
+            }
         }
     }
+    private var offset: CGFloat {
+        let result = isOpen ? self.position + self.dragTranslation : SnappingPosition.bottom
+        guard result >= 0 else { return SnappingPosition.top }
+        return result
+    }
     let content: Content
+    let openPosition: OpenPosition
     
-    init(isOpen: Binding<Bool> = .constant(false), @ViewBuilder content: () -> Content) {
+    init(isOpen: Binding<Bool> = .constant(false), openPosition: OpenPosition, @ViewBuilder content: () -> Content) {
         self._isOpen = isOpen
+        self.openPosition = openPosition
         self.content = content()
     }
     
@@ -60,23 +62,33 @@ struct BottomSheet<Content>: View where Content: View {
                 DragCapsule()
                 self.content
             }
-            .frame(width: geomerty.size.width, height: geomerty.size.height + geomerty.safeAreaInsets.bottom, alignment: .top)
+            .onAppear{ self.setSnappingPositions(size: geomerty.size) }
+            .frame(width: geomerty.size.width, height: geomerty.size.height, alignment: .top)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(40)
-            .offset(y: isOpen ? offset : geomerty.size.height)
+            .offset(y: offset)
             .animation(.interactiveSpring(response: 0.8), value: self.isOpen)
-            .animation(.interactiveSpring(), value: self.offset)
+            .animation(.interactiveSpring(), value: self.position)
             .gesture(DragGesture()
-                .updating($translation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
-                .onEnded{ value in self.snappingPosition.calculateSnappingPosition(y: value.location.y, size: geomerty.size) }
+                .updating($dragTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
+                .onEnded{ value in position += value.translation.height }
             )
         }
+//        .onChange(of: self.isOpen) { isOpen in
+//            position = isOpen ? SnappingPosition.middle : SnappingPosition.bottom
+//        }
+    }
+    
+    func setSnappingPositions(size: CGSize){
+        SnappingPosition.top = size.height / 10
+        SnappingPosition.middle = size.height / 2
+        SnappingPosition.bottom = size.height
     }
 }
 
 struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        BottomSheet(isOpen: .constant(true)){
+        BottomSheet(isOpen: .constant(true), openPosition: .middle){
             VStack{
                 Text("Test text 123")
                 Text("Hello world")

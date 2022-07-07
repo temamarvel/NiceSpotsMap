@@ -83,14 +83,34 @@ struct MKMapViewWrapper : UIViewRepresentable{
             self.mkMapWrapper = mkMapWrapper
         }
         
-        func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+        func didSelect(annotation: MKAnnotation?){
             guard let action = mkMapWrapper.onAnnotationDidSelectAction else { return }
-            action(annotation)
+            guard let annotationValue = annotation else { return }
+            action(annotationValue)
         }
         
-        func mapView(_ mapView: MKMapView, didDeselect annotation: MKAnnotation) {
+        func didDeselect(annotation: MKAnnotation?){
             guard let action = mkMapWrapper.onAnnotationDidDeselectAction else { return }
-            action(annotation)
+            guard let annotationValue = annotation else { return }
+            action(annotationValue)
+        }
+        
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            didSelect(annotation: view.annotation)
+        }
+        
+        func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+            didDeselect(annotation: view.annotation)
+        }
+        
+        @available(iOS 16, *)
+        func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+            didSelect(annotation: annotation)
+        }
+        
+        @available(iOS 16, *)
+        func mapView(_ mapView: MKMapView, didDeselect annotation: MKAnnotation) {
+            didDeselect(annotation: annotation)
         }
     }
 }

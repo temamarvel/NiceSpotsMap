@@ -51,7 +51,7 @@ struct MapView: View {
                 .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 0)}
             .padding(.bottom, 50)
             
-            BottomSheet(isOpen: $isOpen){
+            BottomSheet(isOpen: $isOpen, openPosition: .middle){
                 VStack{
                     Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2")
                 }.frame(width: 100, height: 100).background(Color(.systemPink))
