@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-enum SnappingLocation{
+enum SnappingPosition{
     case top(CGFloat)
     case middle(CGFloat)
     case bottom(CGFloat)
     
-    mutating func calculateNewSnappingLocation(y: CGFloat, size: CGSize){
+    mutating func calculateSnappingPosition(y: CGFloat, size: CGSize){
         //y inside bounds of view
         guard y > 0 && y <= size.height else { return }
         
@@ -36,9 +36,9 @@ struct BottomSheet<Content>: View where Content: View {
     @GestureState private var translation: CGFloat = 0
     //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
     @Binding var isOpen: Bool
-    @State private var snappingLocation: SnappingLocation = .top(0)
+    @State private var snappingPosition: SnappingPosition = .top(0)
     private var offset: CGFloat {
-        switch self.snappingLocation {
+        switch self.snappingPosition {
         case .top(let value):
             return value + self.translation
         case .middle(let value):
@@ -46,7 +46,6 @@ struct BottomSheet<Content>: View where Content: View {
         case .bottom(let value):
             return value + self.translation
         }
-        
     }
     let content: Content
     
@@ -69,7 +68,7 @@ struct BottomSheet<Content>: View where Content: View {
             .animation(.interactiveSpring(), value: self.offset)
             .gesture(DragGesture()
                 .updating($translation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
-                .onEnded{ value in self.snappingLocation.calculateNewSnappingLocation(y: value.location.y, size: geomerty.size) }
+                .onEnded{ value in self.snappingPosition.calculateSnappingPosition(y: value.location.y, size: geomerty.size) }
             )
         }
     }

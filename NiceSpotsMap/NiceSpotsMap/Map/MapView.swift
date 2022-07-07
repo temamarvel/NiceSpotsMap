@@ -22,7 +22,6 @@ struct MapView: View {
     //используется @StateObject для того чтобы хранить инстанс модели, а не  @ObservedObject, который хранит только ссылку
     @StateObject private var mapViewModel = MapViewModel()
 
-    
     @State private var selectedAnnotation: MKAnnotation? = nil
     @State private var isOpen: Bool = false
     
