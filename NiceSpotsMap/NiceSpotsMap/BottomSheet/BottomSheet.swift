@@ -43,7 +43,7 @@ struct BottomSheet<Content>: View where Content: View {
         }
     }
     private var offset: CGFloat {
-        let result = isOpen ? self.position + self.dragTranslation : SnappingPosition.bottom
+        let result = self.position + self.dragTranslation
         guard result >= 0 else { return SnappingPosition.top }
         return result
     }
@@ -66,7 +66,7 @@ struct BottomSheet<Content>: View where Content: View {
             .frame(width: geomerty.size.width, height: geomerty.size.height, alignment: .top)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(40)
-            .offset(y: offset)
+            .offset(y: isOpen ? offset : geomerty.size.height)
             .animation(.interactiveSpring(response: 0.8), value: self.isOpen)
             .animation(.interactiveSpring(), value: self.position)
             .gesture(DragGesture()
@@ -74,9 +74,6 @@ struct BottomSheet<Content>: View where Content: View {
                 .onEnded{ value in position += value.translation.height }
             )
         }
-//        .onChange(of: self.isOpen) { isOpen in
-//            position = isOpen ? SnappingPosition.middle : SnappingPosition.bottom
-//        }
     }
     
     func setSnappingPositions(size: CGSize){
