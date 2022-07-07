@@ -54,7 +54,7 @@ struct MapView: View {
             
             BottomSheet(isOpen: $isOpen){
                 VStack{
-                    Text("Place description")
+                    Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2")
                 }.frame(width: 100, height: 100).background(Color(.systemPink))
             }
         }
