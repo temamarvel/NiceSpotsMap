@@ -21,40 +21,47 @@ struct MapView: View {
     //используем враппер @StateObject чтобы получать уведомления когда отслеживаемые проперти внутри модели будут меняться (в нашем случае это проперть region)
     //используется @StateObject для того чтобы хранить инстанс модели, а не  @ObservedObject, который хранит только ссылку
     @StateObject private var mapViewModel = MapViewModel()
-
+    
     @State private var selectedAnnotation: MKAnnotation? = nil
-    @State private var isOpen: Bool = false
+    @State private var isBottomSheetOpen: Bool = false
     
     var body: some View {
-        ZStack(alignment: .bottom){
-            MKMapViewWrapper(region: $mapViewModel.region, showsUserLocation: mapViewModel.showsUserLocation, showsScale: mapViewModel.showsScale, annotationsDataItems: locations) { MKPointAnnotation(__coordinate: $0.locationCoordinate, title: $0.name, subtitle: $0.description)}
-                .onAnnotationDidSelect{ annotation in
-                    self.selectedAnnotation = annotation
-                    if let _ = self.selectedAnnotation {
-                        isOpen = true
-                    } else {
-                        isOpen = false
+        GeometryReader{ geometry in
+            ZStack(alignment: .bottom){
+                let snappingPosition = SnappingPosition(size: geometry.size)
+                
+                MKMapViewWrapper(region: $mapViewModel.region, showsUserLocation: mapViewModel.showsUserLocation, showsScale: mapViewModel.showsScale, annotationsDataItems: locations) { MKPointAnnotation(__coordinate: $0.locationCoordinate, title: $0.name, subtitle: $0.description)}
+                    .onAnnotationDidSelect{ annotation in
+                        self.selectedAnnotation = annotation
+                        if let _ = self.selectedAnnotation {
+                            isBottomSheetOpen = true
+                        } else {
+                            isBottomSheetOpen = false
+                        }
                     }
+                    .onAnnotationDidDeselect{annotation in
+                        self.selectedAnnotation = nil
+                        isBottomSheetOpen = false
+                    }
+                    .accentColor(Color(.systemBlue))
+                    .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
+                
+                Button{ mapViewModel.requestUserLocation() } label: {
+                    Label("Current location", systemImage: "location.circle.fill")
+                        .padding(10)
+                        .background(MapColors.buttonBackground)
+                        .foregroundColor(Color(.systemGray6))
+                        .clipShape(Capsule())
+                        .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 0)
+                }.padding(.bottom, 50)
+                
+                if isBottomSheetOpen {
+                    BottomSheet(snappingPosition: .constant(snappingPosition), openPosition: .middle){
+                        VStack{
+                            Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2")
+                        }.frame(width: 100, height: 100).background(Color(.systemPink))
+                    }.transition(.slide)
                 }
-                .onAnnotationDidDeselect{annotation in
-                    self.selectedAnnotation = nil
-                    isOpen = false
-                }
-                .accentColor(Color(.systemBlue))
-                .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
-            
-            Button{ mapViewModel.requestUserLocation() } label:{ Label("Current location", systemImage: "location.circle.fill")
-                    .padding(10)
-                    .background(MapColors.buttonBackground)
-                    .foregroundColor(Color(.systemGray6))
-                    .clipShape(Capsule())
-                .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 0)}
-            .padding(.bottom, 50)
-            
-            BottomSheet(isOpen: $isOpen, openPosition: .middle){
-                VStack{
-                    Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2")
-                }.frame(width: 100, height: 100).background(Color(.systemPink))
             }
         }
     }
