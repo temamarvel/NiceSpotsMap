@@ -26,42 +26,38 @@ struct MapView: View {
     @State private var isBottomSheetOpen: Bool = false
     
     var body: some View {
-        GeometryReader{ geometry in
-            ZStack(alignment: .bottom){
-                let snappingPosition = SnappingPosition(size: geometry.size)
-                
-                MKMapViewWrapper(region: $mapViewModel.region, showsUserLocation: mapViewModel.showsUserLocation, showsScale: mapViewModel.showsScale, annotationsDataItems: locations) { MKPointAnnotation(__coordinate: $0.locationCoordinate, title: $0.name, subtitle: $0.description)}
-                    .onAnnotationDidSelect{ annotation in
-                        self.selectedAnnotation = annotation
-                        if let _ = self.selectedAnnotation {
-                            isBottomSheetOpen = true
-                        } else {
-                            isBottomSheetOpen = false
-                        }
-                    }
-                    .onAnnotationDidDeselect{annotation in
-                        self.selectedAnnotation = nil
+        ZStack(alignment: .bottom){
+            MKMapViewWrapper(region: $mapViewModel.region, showsUserLocation: mapViewModel.showsUserLocation, showsScale: mapViewModel.showsScale, annotationsDataItems: locations) { MKPointAnnotation(__coordinate: $0.locationCoordinate, title: $0.name, subtitle: $0.description)}
+                .onAnnotationDidSelect{ annotation in
+                    self.selectedAnnotation = annotation
+                    if let _ = self.selectedAnnotation {
+                        isBottomSheetOpen = true
+                    } else {
                         isBottomSheetOpen = false
                     }
-                    .accentColor(Color(.systemBlue))
-                    .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
-                
-                Button{ mapViewModel.requestUserLocation() } label: {
-                    Label("Current location", systemImage: "location.circle.fill")
-                        .padding(10)
-                        .background(MapColors.buttonBackground)
-                        .foregroundColor(Color(.systemGray6))
-                        .clipShape(Capsule())
-                        .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 0)
-                }.padding(.bottom, 50)
-                
-                if isBottomSheetOpen {
-                    BottomSheet(snappingPosition: .constant(snappingPosition), openPosition: .middle){
-                        VStack{
-                            Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2")
-                        }.frame(width: 100, height: 100).background(Color(.systemPink))
-                    }.transition(.slide)
                 }
+                .onAnnotationDidDeselect{annotation in
+                    self.selectedAnnotation = nil
+                    isBottomSheetOpen = false
+                }
+                .accentColor(Color(.systemBlue))
+                .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
+            
+            Button{ mapViewModel.requestUserLocation() } label: {
+                Label("Current location", systemImage: "location.circle.fill")
+                    .padding(10)
+                    .background(MapColors.buttonBackground)
+                    .foregroundColor(Color(.systemGray6))
+                    .clipShape(Capsule())
+                    .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 0)
+            }.padding(.bottom, 50)
+            
+            if isBottomSheetOpen {
+                BottomSheet(){
+                    VStack{
+                        Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2")
+                    }.frame(width: 100, height: 100).background(Color(.systemPink))
+                }.transition(.slide)
             }
         }
     }

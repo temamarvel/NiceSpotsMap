@@ -11,10 +11,12 @@ struct SnappingPosition{
     var top: CGFloat = 0
     var middle: CGFloat = 0
     var bottom: CGFloat = 0
+    private var gap: CGFloat
     
     init(size: CGSize){
-        self.top = size.height / 10
+        self.gap = size.height / 10
+        self.top = self.gap
         self.middle = size.height / 2
-        self.bottom = size.height
+        self.bottom = size.height - self.gap
     }
 }

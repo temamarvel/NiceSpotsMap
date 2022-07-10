@@ -13,40 +13,24 @@ enum OpenPosition{
 }
 
 private enum BottomSheetOptions{
-    static let snappingDelta: CGFloat = 150
+    static let snappingDelta: CGFloat = 250
 }
 
 struct BottomSheet<Content>: View where Content: View {
-    @GestureState private var dragTranslation: CGFloat = 0
+    @GestureState private var dragCurrentTranslation: CGFloat = 0
     //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
-    @Binding var snappingPosition: SnappingPosition
-    @State private var isOpen: Bool = false
-    @State private var position: CGFloat = 0 {
-        didSet{
-            if position < 0 {
-                position = 0
-                return
-            }
-            if position != snappingPosition.middle && abs(position - snappingPosition.middle) <= BottomSheetOptions.snappingDelta {
-                position = snappingPosition.middle
-                return
-            }
-            if position != snappingPosition.top && position - snappingPosition.top > 0 && position - snappingPosition.top < BottomSheetOptions.snappingDelta {
-                position = snappingPosition.top
-                return
-            }
-        }
-    }
-    private var offset: CGFloat {
-        let result = self.position + self.dragTranslation
-        guard result >= 0 else { return snappingPosition.top }
-        return result
-    }
-    let content: Content
-    let openPosition: OpenPosition
     
-    init(snappingPosition: Binding<SnappingPosition>, openPosition: OpenPosition, @ViewBuilder content: () -> Content) {
-        self._snappingPosition = snappingPosition
+    //@Binding var parentSize: CGSize
+    @State private var isOpen: Bool = false
+    @State private var dragEndTranslation: CGFloat = 0
+    private var offset: CGFloat { self.dragEndTranslation + self.dragCurrentTranslation }
+    //let snappingPosition: SnappingPosition
+    let openPosition: OpenPosition
+    let content: Content
+    
+    init(openPosition: OpenPosition = .middle, @ViewBuilder content: () -> Content) {
+        //self._parentSize =  parentSize
+        //self.snappingPosition = SnappingPosition(size: parentSize.wrappedValue)
         self.openPosition = openPosition
         self.content = content()
     }
@@ -59,34 +43,50 @@ struct BottomSheet<Content>: View where Content: View {
             }
             .onAppear{
                 isOpen = true
-                position = getOpenOffset()
+                dragEndTranslation = getOpenOffset(parentSize: geomerty.size)
             }
-            .frame(width: geomerty.size.width, height: geomerty.size.height, alignment: .top)
+            .frame(width: geomerty.size.width, height: geomerty.size.height * 2, alignment: .top)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(40)
-            .offset(y: isOpen ? offset : getOpenOffset())
+            .offset(y: isOpen ? offset : getOpenOffset(parentSize: geomerty.size))
             .animation(.interactiveSpring(), value: offset)
             .gesture(DragGesture()
-                .updating($dragTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
-                .onEnded{ value in position += value.translation.height }
+                .updating($dragCurrentTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
+                .onEnded{ value in
+                    let result = dragEndTranslation + value.translation.height
+                    let snappingPositions = SnappingPosition(size: geomerty.size)
+                    if result < snappingPositions.top {
+                        dragEndTranslation = snappingPositions.top
+                        return
+                    }
+                    if result - snappingPositions.top < (snappingPositions.middle - snappingPositions.top) / 2 {
+                        dragEndTranslation = snappingPositions.top
+                        return
+                    }
+                    if abs(result - snappingPositions.middle) < (snappingPositions.middle - snappingPositions.top) / 2 {
+                        dragEndTranslation = snappingPositions.middle
+                        return
+                    }
+                    dragEndTranslation = snappingPositions.bottom
+                }
             )
         }
     }
     
-    private func getOpenOffset() -> CGFloat{
+    private func getOpenOffset(parentSize: CGSize) -> CGFloat{
+        let snappingPositions = SnappingPosition(size: parentSize)
         switch self.openPosition {
         case .top:
-            return self.snappingPosition.top
+            return snappingPositions.top
         case .middle:
-            return self.snappingPosition.middle
+            return snappingPositions.middle
         }
     }
 }
 
 struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        let snappingPosition = SnappingPosition(size: CGSize())
-        BottomSheet(snappingPosition: .constant(snappingPosition), openPosition: .middle){
+        BottomSheet(openPosition: .middle){
             VStack{
                 Text("Test text 123")
                 Text("Hello world")
