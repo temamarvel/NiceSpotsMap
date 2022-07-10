@@ -20,8 +20,8 @@ struct BottomSheet<Content>: View where Content: View {
     @GestureState private var dragCurrentTranslation: CGFloat = 0
     //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
     @State private var isOpen: Bool = false
-    @State private var dragEndTranslation: CGFloat = 0
-    private var offset: CGFloat { self.dragEndTranslation + self.dragCurrentTranslation }
+    @State private var baseOffset: CGFloat = 0
+    private var offset: CGFloat { self.baseOffset + self.dragCurrentTranslation }
     let openPosition: OpenPosition
     let content: Content
     
@@ -38,7 +38,7 @@ struct BottomSheet<Content>: View where Content: View {
             }
             .onAppear{
                 isOpen = true
-                dragEndTranslation = getOpenOffset(parentSize: geomerty.size)
+                baseOffset = getOpenOffset(parentSize: geomerty.size)
             }
             .frame(width: geomerty.size.width, height: geomerty.size.height * 2, alignment: .top)
             .background(Color(.secondarySystemBackground))
@@ -48,21 +48,21 @@ struct BottomSheet<Content>: View where Content: View {
             .gesture(DragGesture()
                 .updating($dragCurrentTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
                 .onEnded{ value in
-                    let result = dragEndTranslation + value.translation.height
+                    let result = baseOffset + value.translation.height
                     let snappingPositions = SnappingPosition(size: geomerty.size)
                     if result < snappingPositions.top {
-                        dragEndTranslation = snappingPositions.top
+                        baseOffset = snappingPositions.top
                         return
                     }
                     if result - snappingPositions.top < (snappingPositions.middle - snappingPositions.top) / 2 {
-                        dragEndTranslation = snappingPositions.top
+                        baseOffset = snappingPositions.top
                         return
                     }
                     if abs(result - snappingPositions.middle) < (snappingPositions.middle - snappingPositions.top) / 2 {
-                        dragEndTranslation = snappingPositions.middle
+                        baseOffset = snappingPositions.middle
                         return
                     }
-                    dragEndTranslation = snappingPositions.bottom
+                    baseOffset = snappingPositions.bottom
                 }
             )
         }
