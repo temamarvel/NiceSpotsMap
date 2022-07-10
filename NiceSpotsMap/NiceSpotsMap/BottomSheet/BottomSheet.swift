@@ -19,18 +19,13 @@ private enum BottomSheetOptions{
 struct BottomSheet<Content>: View where Content: View {
     @GestureState private var dragCurrentTranslation: CGFloat = 0
     //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
-    
-    //@Binding var parentSize: CGSize
     @State private var isOpen: Bool = false
     @State private var dragEndTranslation: CGFloat = 0
     private var offset: CGFloat { self.dragEndTranslation + self.dragCurrentTranslation }
-    //let snappingPosition: SnappingPosition
     let openPosition: OpenPosition
     let content: Content
     
     init(openPosition: OpenPosition = .middle, @ViewBuilder content: () -> Content) {
-        //self._parentSize =  parentSize
-        //self.snappingPosition = SnappingPosition(size: parentSize.wrappedValue)
         self.openPosition = openPosition
         self.content = content()
     }
