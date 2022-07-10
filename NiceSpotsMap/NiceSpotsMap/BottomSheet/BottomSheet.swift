@@ -20,6 +20,7 @@ struct BottomSheet<Content>: View where Content: View {
     @GestureState private var dragTranslation: CGFloat = 0
     //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
     @Binding var snappingPosition: SnappingPosition
+    @State private var isOpen: Bool = false
     @State private var position: CGFloat = 0 {
         didSet{
             if position < 0 {
@@ -56,15 +57,28 @@ struct BottomSheet<Content>: View where Content: View {
                 DragCapsule()
                 self.content
             }
+            .onAppear{
+                isOpen = true
+                position = getOpenOffset()
+            }
             .frame(width: geomerty.size.width, height: geomerty.size.height, alignment: .top)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(40)
-            .offset(y: offset)
-            .animation(.interactiveSpring(), value: self.position)
+            .offset(y: isOpen ? offset : getOpenOffset())
+            .animation(.interactiveSpring(), value: offset)
             .gesture(DragGesture()
                 .updating($dragTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
                 .onEnded{ value in position += value.translation.height }
             )
+        }
+    }
+    
+    private func getOpenOffset() -> CGFloat{
+        switch self.openPosition {
+        case .top:
+            return self.snappingPosition.top
+        case .middle:
+            return self.snappingPosition.middle
         }
     }
 }
