@@ -19,13 +19,14 @@ private enum BottomSheetOptions{
 struct BottomSheet<Content>: View where Content: View {
     @GestureState private var dragCurrentTranslation: CGFloat = 0
     //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
-    @State private var isOpen: Bool = false
+    @Binding private var isOpen: Bool
     @State private var baseOffset: CGFloat = 0
     private var offset: CGFloat { self.baseOffset + self.dragCurrentTranslation }
     let openPosition: OpenPosition
     let content: Content
     
-    init(openPosition: OpenPosition = .middle, @ViewBuilder content: () -> Content) {
+    init(isOpen: Binding<Bool>, openPosition: OpenPosition = .middle, @ViewBuilder content: () -> Content) {
+        self._isOpen = isOpen
         self.openPosition = openPosition
         self.content = content()
     }
@@ -36,14 +37,12 @@ struct BottomSheet<Content>: View where Content: View {
                 DragCapsule()
                 self.content
             }
-            .onAppear{
-                isOpen = true
-                baseOffset = getOpenOffset(parentSize: geomerty.size)
-            }
+            .onChange(of: isOpen) { newValue in baseOffset = getBaseOffset(parentSize: geomerty.size) }
             .frame(width: geomerty.size.width, height: geomerty.size.height * 2, alignment: .top)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(40)
-            .offset(y: isOpen ? offset : getOpenOffset(parentSize: geomerty.size))
+            .offset(y: isOpen ? offset : geomerty.size.height)
+            .animation(.interactiveSpring(), value: isOpen)
             .animation(.interactiveSpring(), value: offset)
             .gesture(DragGesture()
                 .updating($dragCurrentTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
@@ -68,8 +67,9 @@ struct BottomSheet<Content>: View where Content: View {
         }
     }
     
-    private func getOpenOffset(parentSize: CGSize) -> CGFloat{
+    private func getBaseOffset(parentSize: CGSize) -> CGFloat{
         let snappingPositions = SnappingPosition(size: parentSize)
+        guard isOpen else { return parentSize.height }
         switch self.openPosition {
         case .top:
             return snappingPositions.top
@@ -81,7 +81,7 @@ struct BottomSheet<Content>: View where Content: View {
 
 struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        BottomSheet(openPosition: .middle){
+        BottomSheet(isOpen: .constant(true), openPosition: .middle){
             VStack{
                 Text("Test text 123")
                 Text("Hello world")
