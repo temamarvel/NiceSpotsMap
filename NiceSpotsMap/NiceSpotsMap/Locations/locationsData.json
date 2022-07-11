@@ -4,6 +4,7 @@
         "name": "SweetCoast",
         "category": "Eat",
         "city": "Yerevan",
+        "adress": "75 Mesrop Mashtots Ave, Yerevan 0009, Armenia"
         "coordinates": {
             "longitude": 44.51653702670684,
             "latitude": 40.18869127939232
@@ -15,6 +16,7 @@
         "name": "Kavcazskaya plennitsa",
         "category": "Eat",
         "city": "Yerevan",
+        "adress": "6 Amiryan St, Yerevan 0001, Armenia"
         "coordinates": {
             "longitude": 44.510175642049106,
             "latitude": 40.17957523903488
@@ -26,6 +28,7 @@
         "name": "Ulikhanyan Jazz Club",
         "category": "Eat",
         "city": "Yerevan",
+        "adress": "7 Sayat-Nova Ave, Yerevan 0001, Armenia"
         "coordinates": {
             "longitude": 44.51709512194008,
             "latitude": 40.1854709316137
