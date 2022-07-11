@@ -14,6 +14,7 @@ struct Location: Hashable, Codable, Identifiable {
     var description: String
     var category: String
     var city: String
+    var adress: String
     
     private var coordinates: Coordinates
     
