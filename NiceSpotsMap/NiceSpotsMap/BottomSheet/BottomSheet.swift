@@ -10,6 +10,7 @@ import SwiftUI
 enum OpenPosition{
     case top
     case middle
+    case bottom
 }
 
 private enum BottomSheetOptions{
@@ -17,11 +18,11 @@ private enum BottomSheetOptions{
 }
 
 struct BottomSheet<Content>: View where Content: View {
-    @GestureState private var dragCurrentTranslation: CGFloat = 0
+    @GestureState private var dragTranslation: CGFloat = 0
     //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
     @Binding private var isOpen: Bool
     @State private var baseOffset: CGFloat = 0
-    private var offset: CGFloat { self.baseOffset + self.dragCurrentTranslation }
+    private var offset: CGFloat { self.baseOffset + self.dragTranslation }
     let openPosition: OpenPosition
     let content: Content
     
@@ -45,7 +46,7 @@ struct BottomSheet<Content>: View where Content: View {
             .animation(.interactiveSpring(), value: isOpen)
             .animation(.interactiveSpring(), value: offset)
             .gesture(DragGesture()
-                .updating($dragCurrentTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
+                .updating($dragTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
                 .onEnded{ value in
                     let result = baseOffset + value.translation.height
                     let snappingPositions = SnappingPosition(size: geomerty.size)
@@ -75,6 +76,8 @@ struct BottomSheet<Content>: View where Content: View {
             return snappingPositions.top
         case .middle:
             return snappingPositions.middle
+        case .bottom:
+            return snappingPositions.bottom
         }
     }
 }
