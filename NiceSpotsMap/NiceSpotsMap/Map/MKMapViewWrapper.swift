@@ -95,6 +95,12 @@ struct MKMapViewWrapper : UIViewRepresentable{
             action(annotationValue)
         }
         
+        //TODO
+        //для касмомных аннотаций на карте
+//        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//
+//        }
+        
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             didSelect(annotation: view.annotation)
         }

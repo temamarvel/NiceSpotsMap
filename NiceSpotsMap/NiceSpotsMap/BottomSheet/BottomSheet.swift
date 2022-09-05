@@ -19,7 +19,7 @@ private enum BottomSheetOptions{
 
 struct BottomSheet<Content>: View where Content: View {
     @GestureState private var dragTranslation: CGFloat = 0
-    //важное знание: если проперть передана через биндинг, то когда ее значение меняется не view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
+    //важное знание: если проперть передана через биндинг, то когда ее значение меняется то view в которой она использется не пересоздается (не зовется инициалайзер), но перересовывается (redraw)
     @Binding private var isOpen: Bool
     @State private var baseOffset: CGFloat = 0
     private var offset: CGFloat { self.baseOffset + self.dragTranslation }
@@ -34,37 +34,42 @@ struct BottomSheet<Content>: View where Content: View {
     
     var body: some View {
         GeometryReader{ geomerty in
-            VStack(){
-                DragCapsule()
-                self.content
-            }
-            .onChange(of: isOpen) { newValue in baseOffset = getBaseOffset(parentSize: geomerty.size) }
-            .frame(width: geomerty.size.width, height: geomerty.size.height * 2, alignment: .top)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(40)
-            .offset(y: isOpen ? offset : geomerty.size.height)
-            .animation(.interactiveSpring(), value: isOpen)
-            .animation(.interactiveSpring(), value: offset)
-            .gesture(DragGesture()
-                .updating($dragTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
-                .onEnded{ value in
-                    let result = baseOffset + value.translation.height
-                    let snappingPositions = SnappingPosition(size: geomerty.size)
-                    if result < snappingPositions.top {
-                        baseOffset = snappingPositions.top
-                        return
-                    }
-                    if result - snappingPositions.top < (snappingPositions.middle - snappingPositions.top) / 2 {
-                        baseOffset = snappingPositions.top
-                        return
-                    }
-                    if abs(result - snappingPositions.middle) < (snappingPositions.middle - snappingPositions.top) / 2 {
-                        baseOffset = snappingPositions.middle
-                        return
-                    }
-                    baseOffset = snappingPositions.bottom
+            ZStack{
+                VStack(){
+                    DragCapsule()
+                    self.content
                 }
-            )
+                .onChange(of: isOpen) { newValue in baseOffset = getBaseOffset(parentSize: geomerty.size) }
+                .frame(width: geomerty.size.width, height: geomerty.size.height * 2, alignment: .top)
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(40)
+                .offset(y: isOpen ? offset : geomerty.size.height)
+                .animation(.interactiveSpring(), value: isOpen)
+                .animation(.interactiveSpring(), value: offset)
+                .gesture(DragGesture()
+                    .updating($dragTranslation){ currentState, gestureState, transaction in gestureState = currentState.translation.height }
+                    .onEnded{ value in
+                        let result = baseOffset + value.translation.height
+                        let snappingPositions = SnappingPosition(size: geomerty.size)
+                        if result < snappingPositions.top {
+                            baseOffset = snappingPositions.top
+                            return
+                        }
+                        if result - snappingPositions.top < (snappingPositions.middle - snappingPositions.top) / 2 {
+                            baseOffset = snappingPositions.top
+                            return
+                        }
+                        if abs(result - snappingPositions.middle) < (snappingPositions.middle - snappingPositions.top) / 2 {
+                            baseOffset = snappingPositions.middle
+                            return
+                        }
+                        baseOffset = snappingPositions.bottom
+                    }
+                )
+            }
+            //бекграунд полностью перехватывает тапы
+            //так можно делать только если не нужна интерактивность с пользоавтелем
+            //.background(.ultraThinMaterial).opacity(0.2)
         }
     }
     
@@ -84,7 +89,7 @@ struct BottomSheet<Content>: View where Content: View {
 
 struct BottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        BottomSheet(isOpen: .constant(true), openPosition: .middle){
+        BottomSheet(isOpen: .constant(true), openPosition: .bottom){
             VStack{
                 Text("Test text 123")
                 Text("Hello world")

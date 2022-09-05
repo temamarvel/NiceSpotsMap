@@ -5,7 +5,7 @@
 //  Created by Артем Денисов on 09.07.2022.
 //
 
-import Foundation
+import SwiftUI
 
 struct SnappingPosition{
     var top: CGFloat = 0
