@@ -41,6 +41,7 @@ struct MapView: View {
                     isBottomSheetOpen = false
                 }
                 .accentColor(Color(.systemBlue))
+                .padding(50)
             
             Button{ mapViewModel.requestUserLocation() } label: {
                 Label("Current location", systemImage: "location.circle.fill")
@@ -51,13 +52,12 @@ struct MapView: View {
                     .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 0)
             }.padding(.bottom, 50)
             
-            BottomSheet(isOpen: $isBottomSheetOpen){
+            //TODO try again LocationButton
+            BottomSheetView(isOpen: $isBottomSheetOpen){
                 VStack{
                     Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2").font(.title)
                     Text((self.selectedAnnotation?.subtitle ?? "Empty1") ?? "Empty2")
-                    
                 }
-                //.frame(width: 100, height: 100).background(Color(.systemPink))
             }
         }
         .onAppear{ mapViewModel.initLocationManager() }
