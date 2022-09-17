@@ -30,16 +30,12 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         span: MapDetails.defaultSpan
     )
     
-    func checkIfLocationServicesIsEnabled(){
-        if CLLocationManager.locationServicesEnabled(){
-            self.locationManager = CLLocationManager()
-            self.locationManager?.delegate = self
-            self.locationManager?.activityType = .fitness
-            self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-            self.locationManager?.pausesLocationUpdatesAutomatically = true
-        }else{
-            print("Location services is disabled")
-        }
+    func initLocationManager(){
+        self.locationManager = CLLocationManager()
+        self.locationManager?.delegate = self
+        self.locationManager?.activityType = .fitness
+        self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager?.pausesLocationUpdatesAutomatically = true
     }
     
     func requestUserLocation(){
@@ -64,17 +60,17 @@ final class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate
         guard let locationManager = self.locationManager else { return }
         
         switch locationManager.authorizationStatus {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .restricted:
-            print("Your location is restricted")
-        case .denied:
-            print("You have denied this app location permission")
-        case .authorizedAlways, .authorizedWhenInUse:
-            guard let location = locationManager.location else { return }
-            region = MKCoordinateRegion(center: location.coordinate, span: MapDetails.defaultSpan)
-        @unknown default:
-            break
+            case .notDetermined:
+                locationManager.requestWhenInUseAuthorization()
+            case .restricted:
+                print("Your location is restricted")
+            case .denied:
+                print("You have denied this app location permission")
+            case .authorizedAlways, .authorizedWhenInUse:
+                guard let location = locationManager.location else { return }
+                region = MKCoordinateRegion(center: location.coordinate, span: MapDetails.defaultSpan)
+            @unknown default:
+                break
         }
     }
     

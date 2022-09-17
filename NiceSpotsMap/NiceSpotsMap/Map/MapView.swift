@@ -41,7 +41,6 @@ struct MapView: View {
                     isBottomSheetOpen = false
                 }
                 .accentColor(Color(.systemBlue))
-                .onAppear{ mapViewModel.checkIfLocationServicesIsEnabled() }
             
             Button{ mapViewModel.requestUserLocation() } label: {
                 Label("Current location", systemImage: "location.circle.fill")
@@ -61,6 +60,11 @@ struct MapView: View {
                 //.frame(width: 100, height: 100).background(Color(.systemPink))
             }
         }
+        .onAppear{ mapViewModel.initLocationManager() }
+        //TODO вообще LocationManeger должен быть определен один раз для компонента карты так чтобы не пересоздаваться каждый раз
+        //так же надо проверить как вьюха будет вести себя если допустим в приложении несколько экраном и мы переключаемся между ними
+        //при следующем показе вьюхи будет ли пересоздаваться менеджер
+        //так же неплохо бы сделать так чтобы менеджер можно было передавать пользователю как параметр, ведь теоритически у приложения уже может быть один глобальный LocationManager и можно было бы не создавать свой внутренний а передавать внешний
     }
 }
 
