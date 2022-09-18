@@ -61,12 +61,6 @@ struct MapView: View {
                     Text((self.selectedAnnotation?.subtitle ?? "Empty1") ?? "Empty2")
                 }
             }
-            //            BottomSheetView(isOpen: $isBottomSheetOpen){
-            //                VStack{
-            //                    Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2").font(.title)
-            //                    Text((self.selectedAnnotation?.subtitle ?? "Empty1") ?? "Empty2")
-            //                }
-            //            }
         }
         .onAppear{ mapViewModel.initLocationManager() }
         //TODO вообще LocationManeger должен быть определен один раз для компонента карты так чтобы не пересоздаваться каждый раз
