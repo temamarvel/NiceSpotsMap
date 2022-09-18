@@ -8,6 +8,8 @@
 import CoreLocationUI
 import SwiftUI
 import MapKit
+import BottomSheet
+import MKMapViewWrapper
 
 enum MapColors{
     static let buttonBackground = LinearGradient(gradient: Gradient(colors: [Color(.systemBlue), Color(.systemMint)]), startPoint: .leading, endPoint: .trailing)
@@ -43,6 +45,7 @@ struct MapView: View {
                 .accentColor(Color(.systemBlue))
                 .padding(50)
             
+            //TODO try again LocationButton
             Button{ mapViewModel.requestUserLocation() } label: {
                 Label("Current location", systemImage: "location.circle.fill")
                     .padding(10)
@@ -52,13 +55,18 @@ struct MapView: View {
                     .shadow(color: Color(.systemGray2), radius: 5, x: 0, y: 0)
             }.padding(.bottom, 50)
             
-            //TODO try again LocationButton
-            BottomSheetView(isOpen: $isBottomSheetOpen){
+            BottomSheet(isOpen: $isBottomSheetOpen){
                 VStack{
                     Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2").font(.title)
                     Text((self.selectedAnnotation?.subtitle ?? "Empty1") ?? "Empty2")
                 }
             }
+            //            BottomSheetView(isOpen: $isBottomSheetOpen){
+            //                VStack{
+            //                    Text((self.selectedAnnotation?.title ?? "Empty1") ?? "Empty2").font(.title)
+            //                    Text((self.selectedAnnotation?.subtitle ?? "Empty1") ?? "Empty2")
+            //                }
+            //            }
         }
         .onAppear{ mapViewModel.initLocationManager() }
         //TODO вообще LocationManeger должен быть определен один раз для компонента карты так чтобы не пересоздаваться каждый раз

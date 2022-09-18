@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "bottomsheet",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/temamarvel/BottomSheet",
+      "state" : {
+        "revision" : "1997e7f4a898d5aaff2a7b6c4ca003874d34f5a7",
+        "version" : "0.0.4"
+      }
+    },
+    {
+      "identity" : "mkmapviewwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/temamarvel/MKMapViewWrapper",
+      "state" : {
+        "revision" : "4af96ef74bbb158f30c1e0196f04509e84c2c393",
+        "version" : "0.0.2"
+      }
+    }
+  ],
+  "version" : 2
+}
