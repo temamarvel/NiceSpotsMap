@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/temamarvel/BottomSheet",
       "state" : {
-        "revision" : "0ff6eec9a88a5be1d0cd07061fb56dabd534a4ba",
-        "version" : "0.0.6"
+        "revision" : "601d6784af30f9eb51d181b043c5f9dbca01602c",
+        "version" : "0.0.8"
       }
     },
     {
